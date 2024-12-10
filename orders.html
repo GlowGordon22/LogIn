@@ -10,18 +10,20 @@
 </head>
 <body>
     <div class="wrapper">
-        <h1>Orders System</h1>
+        <h1 class="title">Orders System</h1>
         
         <!-- Order input section -->
         <div class="order-section">
-            <textarea id="orderInput" placeholder="Enter your order..." required></textarea>
-            <button onclick="saveOrder()">Save Order</button>
-            <button onclick="clearOrders()">Clear Orders</button>
+            <textarea id="orderInput" class="order-input" placeholder="Enter your order..." required></textarea>
+            <div class="button-container">
+                <button class="btn" onclick="saveOrder()">Save Order</button>
+                <button class="btn clear" onclick="clearOrders()">Clear Orders</button>
+            </div>
         </div>
 
         <div class="order-list">
-            <h2>Current Orders</h2>
-            <ul id="orderDisplay"></ul>
+            <h2 class="order-list-title">Current Orders</h2>
+            <ul id="orderDisplay" class="order-list-display"></ul>
         </div>
     </div>
 

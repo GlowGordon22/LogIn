@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Orders System</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-database.js"></script>
+</head>
+<body>
+    <div class="wrapper">
+        <h1>Orders System</h1>
+        
+        <!-- Order input section -->
+        <div class="order-section">
+            <textarea id="orderInput" placeholder="Enter your order..." required></textarea>
+            <button onclick="saveOrder()">Save Order</button>
+            <button onclick="clearOrders()">Clear Orders</button>
+        </div>
+
+        <div class="order-list">
+            <h2>Current Orders</h2>
+            <ul id="orderDisplay"></ul>
+        </div>
+    </div>
+
+    <script>
+        // Firebase configuration for orders system
+        const firebaseConfig = {
+            apiKey: "AIzaSyBys9SawZrovTSB8kei9tXDd_k6J7IrSG0",
+            authDomain: "orders-systems.firebaseapp.com",
+            databaseURL: "https://orders-systems-default-rtdb.firebaseio.com",
+            projectId: "orders-systems",
+            storageBucket: "orders-systems.firebasestorage.app",
+            messagingSenderId: "195522674288",
+            appId: "1:195522674288:web:7b55ba01b1d1aac139feb5",
+            measurementId: "G-KKHPC99LM4"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+
+        // Function to save the order to Firebase Realtime Database
+        function saveOrder() {
+            const orderInput = document.getElementById("orderInput").value;
+
+            if (orderInput.trim() === "") {
+                alert("Please enter an order.");
+                return;
+            }
+
+            // Save the order to Firebase
+            const newOrderRef = database.ref("orders").push();
+            newOrderRef.set({
+                order: orderInput,
+                timestamp: Date.now()
+            });
+
+            document.getElementById("orderInput").value = "";  // Clear the input field
+        }
+
+        // Function to display orders from Firebase
+        function displayOrders() {
+            const orderList = document.getElementById("orderDisplay");
+            orderList.innerHTML = "";  // Clear the existing order list
+
+            database.ref("orders").orderByChild("timestamp").once("value", (snapshot) => {
+                snapshot.forEach((childSnapshot) => {
+                    const order = childSnapshot.val().order;
+                    const listItem = document.createElement("li");
+                    listItem.textContent = order;
+                    orderList.appendChild(listItem);
+                });
+            });
+        }
+
+        // Function to clear orders (reset Firebase data)
+        function clearOrders() {
+            if (confirm("Are you sure you want to clear all orders?")) {
+                database.ref("orders").remove();
+            }
+        }
+
+        // Display orders initially when the page loads
+        displayOrders();
+
+        // Re-display orders when data changes in Firebase
+        database.ref("orders").on("child_added", () => {
+            displayOrders();
+        });
+
+    </script>
+</body>
+</html>

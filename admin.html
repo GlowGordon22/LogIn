@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Menu</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-database.js"></script>
+</head>
+<body>
+    <div class="wrapper">
+        <h1 class="title">Admin Menu</h1>
+        
+        <!-- Admin form with an input box for Admin Name -->
+        <form id="adminForm" class="admin-form">
+            <div class="input-box">
+                <input type="text" id="adminName" placeholder="Admin Name" required>
+                <i class="bx bxs-user"></i> <!-- Optional icon -->
+            </div>
+            
+            <!-- Order System Button -->
+            <button type="submit" class="btn" id="orderSystemBtn">Order System</button>
+
+            <!-- Order Database View Button -->
+            <button type="button" class="btn" id="orderDatabaseViewBtn">Order Database View</button>
+        </form>
+    </div>
+
+    <script>
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyCKq-o9YKQQSL7kAq1619834sPHbj75px0",
+            authDomain: "admin-menu-usage.firebaseapp.com",
+            databaseURL: "https://admin-menu-usage-default-rtdb.firebaseio.com",
+            projectId: "admin-menu-usage",
+            storageBucket: "admin-menu-usage.firebasestorage.app",
+            messagingSenderId: "958972796401",
+            appId: "1:958972796401:web:7f7277109f4e83c8913850",
+            measurementId: "G-L064GM0NK5"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+
+        // Handle the form submission for the 'Order System' button
+        document.getElementById('adminForm').addEventListener('submit', function (e) {
+            e.preventDefault();  // Prevent default form submission
+
+            const adminName = document.getElementById('adminName').value;
+
+            // If Admin Name is provided, redirect to the Order System page
+            if (adminName) {
+                window.location.href = "https://glowgordon22.github.io/LogIn/orders.html"; // Redirect to Order System page
+            } else {
+                alert('Please enter your Admin Name to proceed!');
+            }
+        });
+
+        // Handle click for 'Order Database View' button
+        document.getElementById('orderDatabaseViewBtn').addEventListener('click', function () {
+            const adminName = document.getElementById('adminName').value;
+
+            // If Admin Name is filled out, redirect to the Order Database View page
+            if (adminName) {
+                window.location.href = "https://glowgordon22.github.io/LogIn/orderDatabaseView.html";  // Replace with your actual page
+            } else {
+                alert('Please enter your Admin Name to view the Order Database!');
+            }
+        });
+    </script>
+</body>
+</html>

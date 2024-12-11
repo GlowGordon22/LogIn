@@ -33,30 +33,27 @@
     <script>
         // Hardcoded account data for testing
         const accounts = {
-            "1": {
-                "staffPin": "James"  // Staff Pin for ID 1
-            },
-            "2": {
-                "staffPin": "Jake"  // Staff Pin for ID 2
-            },
-            "3": {
-                "staffPin": "AaronM"  // Staff Pin for ID 3
-            }
+            "1": { "staffPin": "James" },  // Staff Pin for ID 1
+            "2": { "staffPin": "Jake" },   // Staff Pin for ID 2
+            "3": { "staffPin": "AaronM" } // Staff Pin for ID 3
         };
 
         // Check login credentials for staff
         function checkLogin(event) {
             event.preventDefault();  // Prevent form submission
 
-            const colleagueId = document.getElementById('colleagueId').value;
-            const staffPin = document.getElementById('staffPin').value;
+            const colleagueId = document.getElementById('colleagueId').value.trim();
+            const staffPin = document.getElementById('staffPin').value.trim();
 
-            // Check if the Colleague ID exists and the Staff Pin is correct
+            // Check if the Colleague ID exists and the Staff Pin matches
             if (accounts[colleagueId] && accounts[colleagueId].staffPin === staffPin) {
                 alert('Login successful!');
                 window.location.href = "https://glowgordon22.github.io/LogIn/orders.html";  // Redirect to orders.html
             } else {
                 alert('Invalid Colleague ID or Staff Pin!');
+                // Clear invalid inputs
+                document.getElementById('colleagueId').value = "";
+                document.getElementById('staffPin').value = "";
             }
         }
 
@@ -65,7 +62,9 @@
             const adminPin = prompt("Please enter the admin PIN:");
 
             // Check if the admin PIN is correct
-            if (adminPin === "McAdmin" || adminPin === "McOwner") {
+            const validAdminPins = ["McAdmin", "McOwner"];
+            if (validAdminPins.includes(adminPin)) {
+                alert("Admin Login successful!");
                 window.location.href = "https://glowgordon22.github.io/LogIn/admin.html";  // Redirect to admin page
             } else {
                 alert('Incorrect Admin PIN!');

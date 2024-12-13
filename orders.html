@@ -18,8 +18,8 @@
         <div class="order-section">
             <textarea id="orderInput" class="order-input" placeholder="Enter your order..." required></textarea>
             <div class="button-container">
-                <button class="btn" onclick="saveOrder()">Save Order</button>
-                <button class="btn clear" onclick="clearOrders()">Clear Orders</button>
+                <button id="saveOrderBtn" class="btn">Save Order</button>
+                <button id="clearOrderBtn" class="btn clear">Clear Orders</button>
             </div>
         </div>
 
@@ -29,6 +29,7 @@
         </div>
     </div>
 
+    <!-- Firebase SDK Imports -->
     <script src="https://www.gstatic.com/firebasejs/9.1.3/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.1.3/firebase-database.js"></script>
 
@@ -63,10 +64,14 @@
             newOrderRef.set({
                 order: orderInput,
                 timestamp: Date.now()
+            }).then(() => {
+                // Clear the input field after saving the order
+                document.getElementById("orderInput").value = "";
+                alert("Order saved successfully!");
+            }).catch((error) => {
+                console.error("Error saving order: ", error);
+                alert("Failed to save order.");
             });
-
-            // Clear the input field after saving the order
-            document.getElementById("orderInput").value = "";
         }
 
         // Function to display orders from Firebase
@@ -81,13 +86,21 @@
                     listItem.textContent = order;
                     orderList.appendChild(listItem);
                 });
+            }).catch((error) => {
+                console.error("Error fetching orders: ", error);
             });
         }
 
         // Function to clear orders (reset Firebase data)
         function clearOrders() {
             if (confirm("Are you sure you want to clear all orders?")) {
-                database.ref("orders").remove();
+                database.ref("orders").remove().then(() => {
+                    alert("All orders have been cleared!");
+                    displayOrders(); // Update the UI after clearing
+                }).catch((error) => {
+                    console.error("Error clearing orders: ", error);
+                    alert("Failed to clear orders.");
+                });
             }
         }
 
@@ -95,6 +108,10 @@
         window.onload = function() {
             displayOrders();
         }
+
+        // Event listeners for buttons
+        document.getElementById("saveOrderBtn").addEventListener("click", saveOrder);
+        document.getElementById("clearOrderBtn").addEventListener("click", clearOrders);
 
         // Re-display orders when new order is added to Firebase
         database.ref("orders").on("child_added", () => {

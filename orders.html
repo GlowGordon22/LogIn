@@ -53,6 +53,7 @@
         // Function to save the order to Firebase Realtime Database
         function saveOrder() {
             const orderInput = document.getElementById("orderInput").value;
+            console.log("saveOrder function triggered!"); // Debugging log to confirm button click
 
             if (orderInput.trim() === "") {
                 alert("Please enter an order.");
@@ -65,11 +66,12 @@
                 order: orderInput,
                 timestamp: Date.now()
             }).then(() => {
+                console.log("Order saved successfully!"); // Debugging log
                 // Clear the input field after saving the order
                 document.getElementById("orderInput").value = "";
-                alert("Order saved successfully!");
+                alert("Order saved successfully!"); // Confirm saving with alert
             }).catch((error) => {
-                console.error("Error saving order: ", error);
+                console.error("Error saving order:", error); // Log Firebase errors
                 alert("Failed to save order.");
             });
         }
@@ -87,7 +89,7 @@
                     orderList.appendChild(listItem);
                 });
             }).catch((error) => {
-                console.error("Error fetching orders: ", error);
+                console.error("Error fetching orders:", error);
             });
         }
 
@@ -98,7 +100,7 @@
                     alert("All orders have been cleared!");
                     displayOrders(); // Update the UI after clearing
                 }).catch((error) => {
-                    console.error("Error clearing orders: ", error);
+                    console.error("Error clearing orders:", error);
                     alert("Failed to clear orders.");
                 });
             }
@@ -106,15 +108,24 @@
 
         // Display orders initially when the page loads
         window.onload = function() {
+            console.log("Page loaded, displaying orders..."); // Debugging log
             displayOrders();
-        }
+        };
 
         // Event listeners for buttons
-        document.getElementById("saveOrderBtn").addEventListener("click", saveOrder);
-        document.getElementById("clearOrderBtn").addEventListener("click", clearOrders);
+        document.getElementById("saveOrderBtn").addEventListener("click", () => {
+            console.log("Save order button clicked"); // Debugging log for button click
+            saveOrder();
+        });
+
+        document.getElementById("clearOrderBtn").addEventListener("click", () => {
+            console.log("Clear orders button clicked"); // Debugging log for button click
+            clearOrders();
+        });
 
         // Re-display orders when new order is added to Firebase
         database.ref("orders").on("child_added", () => {
+            console.log("New order added, updating list..."); // Debugging log
             displayOrders();
         });
 

@@ -29,6 +29,9 @@
         </div>
     </div>
 
+    <script src="https://www.gstatic.com/firebasejs/9.1.3/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.1.3/firebase-database.js"></script>
+
     <script>
         // Firebase configuration for orders system
         const firebaseConfig = {
@@ -43,8 +46,8 @@
         };
 
         // Initialize Firebase
-        firebase.initializeApp(firebaseConfig);
-        const database = firebase.database();
+        const app = firebase.initializeApp(firebaseConfig);
+        const database = firebase.database(app);
 
         // Function to save the order to Firebase Realtime Database
         function saveOrder() {
@@ -62,7 +65,8 @@
                 timestamp: Date.now()
             });
 
-            document.getElementById("orderInput").value = "";  // Clear the input field
+            // Clear the input field after saving the order
+            document.getElementById("orderInput").value = "";
         }
 
         // Function to display orders from Firebase
@@ -88,9 +92,11 @@
         }
 
         // Display orders initially when the page loads
-        displayOrders();
+        window.onload = function() {
+            displayOrders();
+        }
 
-        // Re-display orders when data changes in Firebase
+        // Re-display orders when new order is added to Firebase
         database.ref("orders").on("child_added", () => {
             displayOrders();
         });
